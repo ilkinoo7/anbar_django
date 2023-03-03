@@ -1,0 +1,94 @@
+{% extends 'main/layout.html' %}
+{% block title %}Senedler{% endblock %}
+
+{% block content %}
+<br><br><br>
+<div class="container">
+
+<div class="alert alert-info"><h2> Senedler elave edin</h2></div>
+
+<form action='http://127.0.0.1:8000/staff/senedler/addsenedler/' method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="alert alert-secondary">
+    <label for="">Melumat</label>
+    <select name="isci_id" class="form-control">
+        
+        {% for st in staff %}
+            <option selected value="{{st.id}}">{{st.ad}} {{st.soyad}}</option>
+        {% endfor %}
+    </select>
+    <br>
+    <label for="">Basliq</label>
+    <input type="text" name="basliqs" placeholder="Basliq" class="form-control" size="3">
+    <br>
+    <label for="">Skan</label>
+    <div class="custom-file">
+        
+        <input type="file" name="foto" class="custom-file-input" id="inputGroupFile01">
+        <label class="custom-file-label" for="inputGroupFile01">Fayl Seçin</label>
+    <br>
+    <label for="">Qeyd</label>
+    <input type="text" name="qeyds" placeholder="Qeyd" class="form-control" size="3">
+    <br>
+    
+    
+    </div>
+    
+    <button type="submit" class="btn btn-success btn-sm" >Daxil et</button>
+    <br><br>
+
+</form>
+</div>
+
+
+
+{% if messages%}
+    {% for message in messages %}
+    <div class="alert alert-info  " role="alert"> {{ message }}</div>
+    {% endfor %}
+{% endif %}
+<table class="table">
+
+   <thead class="thead-dark">
+        <th>#</th>
+        <th>Ad-soyad</th>
+        <th>Basliq</th>
+        <th>Skan</th>
+        <th>Qeyd</th>
+        <th></th>
+    </thead>
+
+
+<tbody class="tbody-dark">
+    {% for x in sened_id %}
+    <tr>
+        <td>{{ x.forloop.counter }}</td>
+        <td>{{ x.ishci_id.ad}} {{ x.ishci_id.soyad }}</td>
+        <td>{{ x.basliq }}</td>
+        <td><img style="width:90px; height:70px;" src="http://127.0.0.1:8000{{ x.skan }}"> </td>
+        <td>{{ x.qeyd }}</td>
+        <td>
+            <form method="post" action="deletesenedler/{{ x.id }}">
+                {% csrf_token %}
+                <input type="hidden" name="isci_id">
+                <button type="submit "><i class="bi bi-trash"></i></button>
+           
+           
+                <!-- <a class="btn btn-danger btn-sm " href="http://127.0.0.1:8000/staff/senedler/deletesenedler/{{ x.id }}"><i class="bi bi-trash"></i></a> -->
+            </form>
+        </td>
+
+        
+    </tr>
+</tbody> 
+    {% endfor %}
+
+
+
+</table>
+
+
+</div>
+
+{% endblock %}
+   

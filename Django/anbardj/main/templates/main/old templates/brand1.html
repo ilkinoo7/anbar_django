@@ -1,0 +1,101 @@
+{% extends 'main/layout.html' %}
+{% block 'title'  %}Brend{% endblock %}
+{% block 'content'  %}
+
+
+
+
+<br><br><br>
+
+
+<div class="container">
+
+    <div class="alert alert-secondary"><h3>Brend</h3></div>
+
+    {% for message in messages %}
+    {{message}}
+    {% endfor %}
+    <br><br>   
+
+    <div class="alert alert-secondary" role="alert">
+
+        {% if editdata %}
+        
+            <form method="post" action="http://127.0.0.1:8000/update/" enctype="multipart/form-data">
+                {% csrf_token %}
+                Ad:<br>
+                <input type="text" autocomplete="off" class="form-control" name="brend" value="{{editdata.brend}}"><br><br>
+
+                Foto:<br>
+                <img style="width:100px; height:80px;" src="{{editdata.image}}"><br>
+                <input type="file" class="form-control" name="foto"><br><br>
+                
+                <input type="hidden" name="bfoto" value="{{editdata.image}}">
+                <input type="hidden" name="id" value="{{editdata.id}}">
+                <button type="submit" class="btn btn-success btn-sm update" name="update" value="Yenile">Yenile</button></a>
+                <a href="http://127.0.0.1:8000/"><button type="button" class="btn btn-danger btn-sm update">Imtina</button></a>
+            </form>
+
+        </div>
+
+        {% else %}
+
+        
+        <form method="post" action="addbrand/" enctype="multipart/form-data">
+            {% csrf_token %}
+            Ad:<br>
+            <input type="text" autocomplete="off" class="form-control" name="brend"><br><br>
+
+            Foto:<br>
+            <input type="file" class="form-control" name="foto"><br><br>
+            <input type="hidden" name="user_id" value="{{user_id}}">
+            <button type="submit" name="d" class="btn btn-success btn-sm insert">Daxil et</button>
+                
+        </form>
+
+        
+        {% endif %}
+    </div>
+
+    {% if sil_id %}
+    <div class="alert alert-info "><b>
+        Siz bu brendi silmeye eminsinizmi?</b>
+        <a href="delete/{{sil_id}}"><button type="submit" class="btn btn-success btn-sm sil">He</button></a>
+        <a href="/"><button type="button" class="btn btn-danger btn-sm sil">Yox</button></a>
+    </div>
+    {% endif %}
+
+    <br><br>
+    Bazada {{say}} brend var
+    <br><br>
+    
+
+    <table class="table table-hover">
+
+        <thead class="thead-dark">
+            <th>Brend</th>
+            <th>Foto</th>
+            <th></th>
+        </thead>
+
+
+    
+        
+        <tbody>
+            {% for x in data %}
+            <tr>
+                <td>{{x.brend}}</td> 
+                <td><img style="width:75px; height:65px;" src="{{x.image}}"></td>
+
+                <td>   
+                    <a href="http://127.0.0.1:8000/silbrand/{{x.id}}"><button type="button" class="btn btn-danger btn-sm sil" name="sil">Sil</button> </a> 
+                    <a href="http://127.0.0.1:8000/redaktebrand/{{x.id}}"><button type="button" class="btn btn-primary btn-sm sil" name="redakte">Redakte</button> </a><br><br>
+                </td>
+            </tr>
+        </tbody>
+        {% endfor %}
+    </table>
+
+
+    {% endblock %}
+</div>

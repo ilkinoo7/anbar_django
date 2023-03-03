@@ -1,0 +1,154 @@
+{% extends 'main/layout.html' %}
+{% block 'title'  %}Order{% endblock %}
+{% block 'content'  %}
+<h2>Sifariş</h2>
+
+
+{% for message in messages %}
+{{message}}
+{% endfor %}
+<br><br>
+
+{% if sil_id %}
+<div class="alert alert-secondary" role="alert">
+    Siz bu brendi silmeye eminsinizmi?<br><br>
+    <a href="deleteorder/{{sil_id}}"><button type="submit" class="btn btn-success btn-sm sil">He</button></a>
+    <a href="/"><button type="button" class="btn btn-danger btn-sm sil">Yox</button></a>
+</div>
+{% endif %}
+
+{% if tesdiq_id %}
+<div class="alert alert-secondary" role="alert">
+    Siz bu sifarişi silmeye eminsinizmi?<br><br>
+    <a href="tesdiqlenmeyorder/{{tesdiq_id}}"><button type="submit" class="btn btn-success btn-sm sil">He</button></a>
+    <a href="http://127.0.0.1:8000/orders/"><button type="button" class="btn btn-success btn-sm sil">Yox</button></a>
+</div>
+{% endif %}
+
+{% if editdata %}
+<div class="alert alert-secondary" role="alert">
+    <form method="post" action="http://127.0.0.1:8000/updateorder/">
+        {% csrf_token %}
+
+        Klient:<br>
+        <select  name="client_id" class="form-control">
+            <option value="{{editdata.client_id}}">Müştərini seçin</option>
+            {% for c in clients %}
+                {% if editdata.client_id_id == c.id %}
+                <option selected value="{{c.id}}">{{c.client}}</option>
+                {% else %}
+                <option value="{{c.id}}">{{c.client}}</option>
+                {% endif %}
+            {% endfor %}
+        </select><br><br>
+
+        Məhsul:<br>
+        <select  name="product_id" class="form-control">
+            <option value="{{editdata.product_id}}">Məhsulu seçin</option>
+            {% for p in products %}
+                {% if editdata.product_id_id == p.id %}
+                <option selected value="{{p.id}}">{{p.mehsul}}</option>
+                {% else %}
+                <option value="{{p.id}}">{{p.mehsul}}</option>
+                {% endif %}
+            {% endfor %}
+        </select><br><br>
+
+
+
+        Miqdar:<br>
+        <input type="text" autocomplete="off" class="form-control" name="pmiqdar" value="{{editdata.order}}"><br><br>
+        <input type="hidden" name="id" value="{{editdata.id}}">
+        <button type="submit" class="btn btn-success btn-sm update" name="update" value="Yenile">Yenile</button></a>
+        <a href="http://127.0.0.1:8000/products/"><button type="button" class="btn btn-danger btn-sm update">Imtina</button></a>
+    </form>
+
+</div>
+
+{% else %}
+
+<div class="alert alert-secondary" role="alert">
+    <form method="post" action="addorder/">
+        {% csrf_token %}
+
+        Klient:<br>
+        <select class="form-control" name="client_id">
+            <option value="">Müştərini seçin</option>
+            {% for c in clients %}
+            <option value="{{c.id}}">{{c.ad}}</option>
+            {% endfor %}
+        </select><br><br>
+        
+
+        Məhsul:<br>
+        <select class="form-control" name="product_id">
+            <option value="">Məhsulu seçin</option>
+            {% for p in products %}
+            <option value="{{p.id}}">{{p.mehsul}}</option>
+            {% endfor %}
+        </select><br><br>
+
+
+        Miqdar:<br>
+        <input type="text" autocomplete="off" class="form-control" name="pmiqdar"><br><br>
+        
+        <input type="submit" name="d" value="Daxil et">
+        
+    </form>
+</div>
+{% endif %}
+
+<br><br>
+
+<div class="alert alert-info">Müştəri:<b>{{sayklient}}</b> Sifariş:<b>{{bsay}}</b> Brend: <b>{{saybrend}}</b>
+    Məhsul:<b>{{saymehsul}}</b> Çeşid: <b>{{cesid}}</b> Ümumi məhsul: <b> {{mehsuldepo}}</b> 
+    Alış : <b>{{alisdepo}}</b> Satış <b>{{satisdepo}}</b> Qazanc: <b>{{qazanc}}</b> Cari Qazanc : <b>{{cariqaz}}</b>
+</div>
+
+
+
+
+Bazada {{sayorder}} brend var
+<br><br>
+{% for x in orderdata %}
+<table class="table">
+    <td>
+        
+        <thead>
+            <b>Klient: </b>{{x.client_id}}<br>
+            <b>Məhsul: </b>{{x.product_id}}<br>
+            <b>Miqdar: </b>{{x.pmiqdar}}<br> 
+            <b>Stok: </b>{{x.product_id.miqdar}}
+        </thead>
+    
+    </td>
+</table>  
+    
+<div class="alert alert-secondary" role="alert">
+    <form method="post" action="tesdiqorder/">
+        {% csrf_token %}
+        <input type="hidden" name="oid" value="{{x.id}}">
+        <input type="hidden" name="pid" value="{{x.product_id.id}}">
+        <input type="hidden" name="pmiqdar" value="{{x.pmiqdar}}">
+        <input type="hidden" name="miqdar" value="{{x.product_id.miqdar}}">
+
+        {% if x.tesdiq == 0 %}
+
+        <button type="submit" class="btn btn-success btn-sm"><i class="bi bi-check"></i></button>
+        <a class="btn btn-warning btn-sm" href="http://127.0.0.1:8000/redakteorder/{{x.id}}"><i class="bi bi-pencil"></i></a>
+        <a class= "btn btn-danger btn-sm" href="http://127.0.0.1:8000/silorder/{{x.id}}" ><i class="bi bi-trash"></i></a>
+        {% else %}
+        <a class= "btn btn-warning btn-sm" href="http://127.0.0.1:8000/legvetorder/{{x.id}}" ><i class="bi bi-x"></i></a>
+        {% endif %}
+
+    </form>
+</div>
+
+    
+
+    
+{% endfor %}
+
+
+
+{% endblock %}

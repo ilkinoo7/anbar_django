@@ -1,0 +1,20 @@
+{% if user.is_authenticated %}
+
+<meta http-equiv="refresh" content="0; URL={% url 'home' %}">
+
+{% else %}
+
+<form method="post" action="{% url 'login_user' %}">
+
+    {% csrf_token %}
+    USERNAME:
+    <input type="text" name="username"><br><br>
+    
+    Parol:
+    <input type="password" name="password"><br><br>
+
+    <button type="submit" name="d">Daxil ol</button>
+    <a href="{% url 'register' %}">Sign up</a>
+</form>
+
+{% endif %}

@@ -1,0 +1,46 @@
+{% extends 'main/layout.html' %}
+{% block 'title'  %}USER{% endblock %}
+{% block 'content'  %}
+<h2>Profil</h2>
+
+
+{% for message in messages %}
+{{message}}
+{% endfor %}
+<br><br>
+
+<div class="alert alert-secondary" role="alert">
+
+    {% if editdata %}
+    <form method="post" enctype="multipart/form-data" action="http://127.0.0.1:8000/updateprofile/{{ request.id }}">
+        {% csrf_token %}
+        
+        Ad:<br>
+        <input type="text" name="first_name" autocomplete="off" class="form-control" value="{{request.first_name}}"><br>
+        Soyad:<br>
+        <input type="text" name="last_name" autocomplete="off" class="form-control" value="{{request.last_name}}"><br>
+        Username:<br>
+        <input type="text" name="username" autocomplete="off" class="form-control" value="{{request.user.username}}"><br>
+        Email:<br>
+        <input type="text" name="email" autocomplete="off" class="form-control" value="{{request.user.email}}"><br>
+
+        Cari parol:<br>
+        <input type="password" name="password" autocomplete="off"  class="form-control"><br>
+
+        Yeni parol:<br>
+        <input type="password" name="newpass" value="{{request.newpass}}" autocomplete="off"  class="form-control"><br>
+
+        Dəyişiklikləri yadda saxlamaq üçün hazırki parolu daxil edin:<br>
+        <input type="password" name="newpassconf" value="{{request.newpassconf}}" autocomplete="off" class="form-control"><br>
+
+        <button type="submit" name="d" class="btn btn-success btn-sm">Saxla</button>
+        
+
+    </form>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}
+

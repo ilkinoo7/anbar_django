@@ -1,0 +1,187 @@
+{% extends 'main/layout1.html' %}
+{% load static %}
+{% block 'content'  %}
+
+
+<div style="display:none">{% block axtar  %}http://127.0.0.1:8000/axtar_order/{% endblock %}</div>
+
+<!-- Form Start -->
+<div class="container-fluid pt-4 px-4">
+    {% if editdata %}
+
+    <div class="row g-4">
+        <div class="col-sm-12 col-xl-12">
+            <div class="bg-light rounded h-100 p-4">
+                <h6 class="mb-4">Brend</h6>
+                <form method="post" action="{% url 'editorder' %}" enctype="multipart/form-data">
+                    {% csrf_token %}
+ 
+                    
+                    <select name="client_id" class="form-select mb-3" aria-label="Müştərini seçin">
+                        <option value="{{editdata.client_id}}">Müştərini seçin</option>
+                        {% for c in clients %}
+                            {% if editdata.client_id_id == c.id %}
+                            <option selected value="{{c.id}}">{{c.ad}}</option>
+                            {% else %}
+                            <option value="{{c.id}}">{{c.ad}}</option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>       
+
+
+                    <select name="product_id" class="form-select mb-3" aria-label="Məhsulu seçin">
+                        <option value="{{editdata.product_id}}">Məhsulu seçin</option>
+                        {% for p in products %}
+                            {% if editdata.product_id_id == p.id %}
+                            <option selected value="{{p.id}}">{{p.mehsul}}</option>
+                            {% else %}
+                            <option value="{{p.id}}">{{p.mehsul}}</option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>             
+
+
+                    
+                    <div class="mb-3">
+                        <label for="exampleInputEmail1" class="form-label">Miqdar</label>
+                        <input type="text" autocomplete="off" class="form-control" name="pmiqdar" value="{{editdata.pmiqdar}}">
+                        <input type="hidden" name="user_id" value="{{user_id}}">
+                        <input type="hidden" name="id" value="{{editdata.id}}">
+                    </div>          
+                    
+                    <button type="submit" name="d" class="btn btn-primary">Daxil et</button>
+                </form>
+            </div>
+        </div>                  
+    </div>
+
+    {% else %}
+
+
+    {% if sil_id %}
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <i class="fa fa-exclamation-circle me-2"></i>An icon &amp; dismissing danger alert—check it out!
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button><br>
+        <a href="deleteorder/{{sil_id}}"><button type="submit" class="btn btn-success btn-sm sil">He</button></a>
+
+    </div>
+    {% endif %}
+
+    <div class="row g-4">
+        <div class="col-sm-12 col-xl-12">
+            <div class="bg-light rounded h-100 p-4">
+                <h6 class="mb-4">Müştəri</h6>
+
+          
+                <form method="post" action="addorder/" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    <select name="client_id" class="form-select mb-3" aria-label="Müştərini seçin">
+                        <option value="">Müştərini seçin</option>
+                        {% for c in clients %}     
+                            <option value="{{c.id}}">{{c.ad}}</option>              
+                        {% endfor %}
+                    </select>    
+
+                                     
+                    <select name="product_id" class="form-select mb-3" aria-label="Məhsulu seçin">
+                        <option value="">Məhsulu seçin</option>
+                        {% for p in products %}     
+                            <option value="{{p.id}}">{{p.mehsul}}</option>              
+                        {% endfor %}
+                    </select>    
+                    
+          
+                    <div class="mb-3">
+                        <label for="exampleInputEmail1" class="form-label">Miqdar</label>
+                        <input type="text" autocomplete="off" class="form-control" name="pmiqdar">
+                        
+                    </div>          
+                    
+                    <button type="submit" name="d" class="btn btn-primary">Daxil et</button>
+                </form>
+            </div>
+        </div>                  
+    </div>
+
+    {% endif %}
+</div>
+<!-- Form End -->
+
+
+
+
+
+<!-- Recent Sales Start -->
+<div class="container-fluid pt-4 px-4">
+    <div class="bg-light text-center rounded p-4">
+        <div class="d-flex align-items-center justify-content-between mb-4">
+            <h6 class="mb-0">Recent Salse</h6>
+            <a href="">Show All</a>
+        </div>
+        <div class="table-responsive">
+            <table class="table text-start align-middle table-bordered table-hover mb-0">
+                <thead>
+                    <tr class="text-dark">
+                        <th scope="col"><input class="form-check-input" type="checkbox"></th>
+                        <th scope="col">Date</th>
+                        <th>Klient</th>
+                        <th>Məhsul</th>
+                        <th>Miqdar</th>
+                        <th>Stok</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for x in orderdata %}
+                    <tr>
+                        <td><input class="form-check-input" type="checkbox"></td>
+                        <td>{{x.data_order}}</td>  
+                        <td>{{x.client_id}}</td>
+                        <td>{{x.product_id}}</td>
+                        <td>{{x.pmiqdar}}</td>
+                        <td>{{x.product_id.miqdar}}</td>
+                        
+                        
+                            <form method="post" action="{% url 'tesdiqorder' %}">
+                                {% csrf_token %}
+                                <input type="hidden" name="oid" value="{{x.id}}">
+                                <input type="hidden" name="pid" value="{{x.product_id.id}}">
+                                <input type="hidden" name="pmiqdar" value="{{x.pmiqdar}}">
+                                <input type="hidden" name="miqdar" value="{{x.product_id.miqdar}}">
+                        
+                                {% if x.tesdiq == 0 %}
+                        
+                                
+                                <td>
+                                    <button type="submit" class="btn btn-success btn-sm"><i class="bi bi-check"></i></button>
+                                    <a href="{% url 'redakteorder' x.id %}"><button type="button" class="btn btn-outline-success m-2" name="sil">Redakte</button></a>
+                                    <a href="{% url 'silorder' x.id %}"><button type="button" class="btn btn-outline-danger m-2" name="redakte">Sil</button></a>
+                                </td>
+                                {% else %}
+                                <td>
+                                    <a class= "btn btn-warning btn-sm" href=" {% url 'legvetorder' x.id %} " ><i class="bi bi-x"></i></a>
+                                </td>
+                                {% endif %}
+                        
+                            </form>
+                        
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<!-- Recent Sales End -->
+
+
+
+
+
+
+
+
+
+{% endblock %}
+

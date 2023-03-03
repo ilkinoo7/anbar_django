@@ -1,0 +1,53 @@
+{% extends 'main/layout.html' %}
+{% block 'title'  %}Expenses{% endblock %}
+{% block 'content'  %}
+<h2>Xərc</h2>
+
+
+{% for message in messages %}
+{{message}}
+{% endfor %}
+<br><br>
+
+{% if sil_id %}
+    Siz bu məhsulu silmeye eminsinizmi?<br><br>
+    <a href="deleteexpenses/{{sil_id}}"><button>He</button></a>
+    <a href="/"><button>Yox</button></a>
+{% endif %}
+
+{% if editdata %}
+<form method="post" action="http://127.0.0.1:8000/updateexpenses/">
+    {% csrf_token %}
+
+    Xerc:<br>
+    <input type="text" name="xerc" value="{{editdata.xerc}}"><br><br>
+
+    <input type="hidden" name="id" value="{{editdata.id}}">
+    <input type="submit" name="update" value="Yenile">
+    <a href="/"><button type="button">Imtina</button></a>
+    </form>
+
+{% else %}
+
+<form method="post" action="addexpenses/">
+    {% csrf_token %}
+    Xerc:<br>
+    <input type="text" name="xerc"><br><br>
+    
+    <input type="submit" name="d" value="Daxil et">
+    
+    </form>
+{% endif %}
+
+<br><br>
+Bazada {{sayexpenses}} məhsul var
+<br><br>
+{% for x in expensesdata %}
+    <b>Xerc: </b>{{x.xerc}}  
+    <a href="http://127.0.0.1:8000/silexpenses/{{x.id}}"><button type="submit" name="sil">Sil</button></a>
+    <a href="http://127.0.0.1:8000/redakteexpenses/{{x.id}}"><button type="submit" name="redakte">Redakte</button></a><br><br>
+{% endfor %}
+
+
+
+{% endblock %}

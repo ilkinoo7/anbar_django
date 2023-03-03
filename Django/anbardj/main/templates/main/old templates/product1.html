@@ -1,0 +1,121 @@
+{% extends 'main/layout.html' %}
+{% block 'title'  %}Product{% endblock %}
+{% block 'content'  %}
+<h2>Product</h2>
+
+
+{% for message in messages %}
+{{message}}
+{% endfor %}
+<br><br>
+
+{% if sil_id %}
+<div class="alert alert-secondary" role="alert">
+    Siz bu məhsulu silmeye eminsinizmi?<br><br>
+    <a href="deleteproduct/{{sil_id}}"><button type="submit" class="btn btn-success btn-sm sil">He</button></a>
+    <a href="http://127.0.0.1:8000/products/"><button type="button" class="btn btn-danger btn-sm sil">Yox</button></a>
+</div>
+{% endif %}
+
+{% if editdata %}
+<div class="alert alert-secondary" role="alert">
+    <form method="post" action="http://127.0.0.1:8000/updateproduct/" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        Brend:<br>
+        <select  name="brand_id" class="form-control">
+            <option value="{{editdata.brand_id}}">Brendi secin</option>
+            {% for b in brands %}
+                {% if editdata.brand_id_id == b.id %}
+                <option selected value="{{b.id}}">{{b.brend}}</option>
+                {% else %}
+                <option value="{{b.id}}">{{b.brend}}</option>
+                {% endif %}
+            {% endfor %}
+        </select><br><br>
+
+        Məhsul:<br>
+        <input type="text" autocomplete="off" class="form-control" name="mehsul" value="{{editdata.mehsul}}"><br><br>
+
+        Foto:<br>
+        <img style="width:100px; height:80px;" src="{{editdata.imageproduct}}"><br>
+        <input type="file" name="foto"><br><br>
+
+        Aliş:<br>
+        <input type="text" autocomplete="off" class="form-control" name="alis" value="{{editdata.alis}}"><br><br>
+
+        Satış:<br>
+        <input type="text" autocomplete="off" class="form-control" name="satis" value="{{editdata.satis}}"><btelr><br>
+
+        Miqdar:<br>
+        <input type="text" autocomplete="off" class="form-control" name="miqdar" value="{{editdata.miqdar}}"><br><br>
+
+        <input type="hidden" name="pfoto" value="{{editdata.imageproduct}}">
+        <input type="hidden" name="id" value="{{editdata.id}}">
+        <button type="submit" class="btn btn-success btn-sm update" name="update" value="Yenile">Yenile</button></a>
+        <a href="http://127.0.0.1:8000/products"><button type="button" class="btn btn-danger btn-sm update">Imtina</button></a>
+    </form>
+
+</div>
+
+{% else %}
+
+<div class="alert alert-secondary" role="alert">
+    <form method="post" action="addproduct/" enctype="multipart/form-data">
+        {% csrf_token %}
+        
+        Brend:<br>
+        <select class="form-control" name="brand_id">
+            <option value="">Brendi secin</option>
+            {% for b in brands %}
+            <option value="{{b.id}}">{{b.brend}}</option>
+            {% endfor %}
+        </select><br><br>
+
+        Məhsul:<br>
+        <input type="text" autocomplete="off" class="form-control" name="mehsul"><br><br>
+
+        Foto:<br>
+        <input type="file" autocomplete="off" class="form-control" name="foto"><br><br>
+
+        Alış:<br>
+        <input type="text" autocomplete="off" class="form-control" name="alis"><br><br>
+
+        Satış:<br>
+        <input type="text" autocomplete="off" class="form-control" name="satis"><br><br>
+
+        Miqdar:<br>
+        <input type="text" autocomplete="off" class="form-control" name="miqdar"><br><br>
+
+        
+        <button type="submit" name="d" class="btn btn-success btn-sm insert">Daxil et</button>
+    
+    </form>
+</div>
+{% endif %}
+
+<br><br>
+Bazada {{sayproduct}} məhsul var
+<br><br>
+{% for x in productdata %}
+<table class="table">
+    <td>
+        
+        <thead>
+            <b>Brend: </b>{{x.brand_id}}<br>
+            <b>Məhsul: </b>{{x.mehsul}}<br> 
+            <img style="width:75px; height:65px;" src="{{x.imageproduct}}"><br> 
+            <b>Alış: </b>{{x.alis}}<br>
+            <b>Satış: </b>{{x.satis}}<br>
+            <b>Miqdar: </b>{{x.miqdar}}<br>
+            <a href="http://127.0.0.1:8000/silproduct/{{x.id}}"><button type="button" class="btn btn-danger btn-sm sil" name="sil">Sil</button> </a>
+            <a href="http://127.0.0.1:8000/redakteproduct/{{x.id}}"><button type="button" class="btn btn-primary btn-sm sil" name="redakte">Redakte</button></a><br><br>
+        </thead>
+    
+    </td>
+    </table>
+{% endfor %}
+
+
+
+{% endblock %}

@@ -1,0 +1,128 @@
+{% extends 'main/layout1.html' %}
+{% load static %}
+{% block 'content'  %}
+
+<div style="display:none">{% block axtar  %}http://127.0.0.1:8000/axtar/{% endblock %}</div>
+
+
+
+
+<!-- Form Start -->
+<div class="container-fluid pt-4 px-4">
+    {% if editdata %}
+
+    <div class="row g-4">
+        <div class="col-sm-12 col-xl-12">
+            <div class="bg-light rounded h-100 p-4">
+                <h6 class="mb-4">Brend</h6>
+                <form method="post" action=" {% url 'edit' %} " enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="exampleInputEmail1" class="form-label">Ad</label>
+                        <input type="text" autocomplete="off" class="form-control" value="{{editdata.brend}}" name="brend">
+                        
+                    </div>
+                    <div class="mb-3">
+                        <label for="exampleInputPassword1" class="form-label">Foto</label>
+                        <img style="width:100px; height:80px;" src="{{editdata.image}}"><br><br>
+                        <input type="file" class="form-control" name="foto">
+
+                        <input type="hidden" name="bfoto" value="{{editdata.image}}">
+                        <input type="hidden" name="id" value="{{editdata.id}}">
+                        <input type="hidden" name="user_id" value="{{user_id}}">
+                    </div>
+                    
+                    <button type="submit" name="d" class="btn btn-primary">Daxil et</button>
+                </form>
+            </div>
+        </div>                  
+    </div>
+
+    {% else %}
+
+
+    {% if sil_id %}
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <i class="fa fa-exclamation-circle me-2"></i>Siz bu brendi silmeye eminsinizmi?
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button><br>
+        <a href="delete/{{sil_id}}"><button type="submit" class="btn btn-success btn-sm sil">He</button></a>
+
+    </div>
+    {% endif %}
+
+    <div class="row g-4">
+        <div class="col-sm-12 col-xl-12">
+            <div class="bg-light rounded h-100 p-4">
+                <h6 class="mb-4">Brend</h6>
+                <form method="post" action="addbrand/" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="exampleInputEmail1" class="form-label">Ad</label>
+                        <input type="text" autocomplete="off" class="form-control" name="brend">
+                        
+                    </div>
+                    <div class="mb-3">
+                        <label for="exampleInputPassword1" class="form-label">Foto</label>
+                        <input type="file" class="form-control" name="foto"><br><br>
+                        <input type="hidden" name="user_id" value="{{user_id}}">
+                    </div>
+                    
+                    <button type="submit" name="d" class="btn btn-primary">Daxil et</button>
+                </form>
+            </div>
+        </div>                  
+    </div>
+
+    {% endif %}
+</div>
+<!-- Form End -->
+
+
+
+
+
+<!-- Recent Sales Start -->
+<div class="container-fluid pt-4 px-4">
+    <div class="bg-light text-center rounded p-4">
+        <div class="d-flex align-items-center justify-content-between mb-4">
+            <h6 class="mb-0">Recent Salse</h6>
+            <a href="">Show All</a>
+        </div>
+        <div class="table-responsive">
+            <table class="table text-start align-middle table-bordered table-hover mb-0">
+                <thead>
+                    <tr class="text-dark">
+                        <th scope="col"><input class="form-check-input" type="checkbox"></th>
+                        <th scope="col">Yaradildi</th>
+                        <th>Brend</th>
+                        <th>Foto</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for x in data %}
+                    <tr>
+                        <td><input class="form-check-input" type="checkbox"></td>
+                        <td>{{x.data_brend}}</td>
+                        <td>{{x.brend}}</td>
+                        <td><img style="width:75px; height:65px;" src="{{x.image}}"></td>
+                        
+                        <td>
+                            <a href="{% url 'redaktebrand' x.id %}"><button type="button" class="btn btn-outline-success m-2" name="sil">Redakte</button></a>
+                            <a href="{% url 'silbrand' x.id %}"><button type="button" class="btn btn-outline-danger m-2" name="redakte">Sil</button></a>
+                        </td>
+                    </tr>
+                    
+
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<!-- Recent Sales End -->
+
+
+
+{% endblock %}
+

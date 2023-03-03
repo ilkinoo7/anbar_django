@@ -1,0 +1,142 @@
+{% extends 'main/layout.html' %}
+{% block title %}Isciler{% endblock %}
+
+{% block content %}
+<br><br><br>
+
+<div class="container">
+
+<div class="alert alert-secondary"><h3>Isciler</h3></div>
+
+<div class="alert alert-secondary">
+    
+    {% if editstaff %}
+        <form action="http://127.0.0.1:8000/staff/editstaff/updatestaff/{{ editstaff.id }}" method="post">
+            {% csrf_token %}
+
+            <label for="">Ad</label>
+            <input  placeholder="Yeni Teyinat" class="form-control" name="ad" value="{{ editstaff.ad}}">
+            <br>
+            <label for="">Soyad</label>
+            <input  placeholder="Soyad" class="form-control" name="soyad" value="{{ editstaff.soyad }}">
+            <br>
+            <label for="">Telefon</label>
+            <input  placeholder="Telefon" class="form-control" name="telefon" value="{{ editstaff.telefon }}">
+            <br>
+            <label for="">Ev Telefonu</label>
+            <input  placeholder="Ev Telefonu" class="form-control" name="ev_tel" value="{{ editstaff.ev_tel }}">
+            <br>
+            <label for="">Unvan</label>
+            <input  placeholder="Unvan" class="form-control" name="unvan" value="{{ editstaff.unvan }}">
+            <br>
+            <label for="">Email</label>
+            <input  placeholder="Email" class="form-control" name="email" value="{{ editstaff.email }}">
+            <br>
+            <label for="">Vezife</label>
+            <input  placeholder="Vezife" class="form-control" name="vezife" value="{{ editstaff.vezife }}">
+            <br>
+            <button type="submit" class="btn btn-success btn-sm" >Yenile</button>
+            <a class="btn btn-danger btn-sm"  href="/staff">Imtina</a>
+            <br><br>
+        </form>
+        
+        {% else %}
+            <br><br>
+    <form action="addstaff/" method="POST" >
+    {% csrf_token %}
+    <label for="">Ad</label>
+    <input type="text" name="ad" placeholder="Ad" class="form-control">
+    <br>
+    <label for="">Soyad</label>
+    <input type="text" name="soyad" placeholder="Soyad" class="form-control" >
+    <br>
+    <label for="">Telefon</label>
+    <input type="text" name="telefon" placeholder="Telefon" class="form-control" >
+    <br>
+    <label for="">Ev Telefonu</label>
+    <input type="text" name="ev_tel" placeholder="Ev Telefonu" class="form-control" >
+    <br>
+    <label for="">Unvan</label>
+    <input type="text" name="unvan" placeholder="Unvan" class="form-control" >
+    <br>
+    <label for="">Email</label>
+    <input type="text" name="email" placeholder="Email" class="form-control" >
+    <br>
+    <label for="">Vezife</label>
+    <input type="text" name="vezife" placeholder="Vezife" class="form-control" >
+    <br>
+    <button type="submit" class="btn btn-success btn-sm" >Daxil et</button>
+
+</form> 
+
+
+{% endif %}
+</div>
+{% if deletest %}
+<form method="post" action="deletestaff/{{ deletest.id }}">
+    {% csrf_token %}
+
+    <div class="alert alert-info "><b>Silmek istediyinizden eminsinizmi ?</b>
+    <button class="btn btn-success btn-sm" type="submit"><i class="bi bi-check"></i></button>
+    <a class="btn btn-danger btn-sm" href="http://127.0.0.1:8000/staff"><i class="bi bi-x"></i></a>
+    </div>
+
+</form>
+{% endif%}
+{% if messages%}
+    {% for message in messages %}
+    <div class="alert alert-info  " role="alert"> {{ message }}</div>
+    {% endfor %}
+{% endif %}
+<table class="table table-hover">
+
+    <thead class="thead-dark">
+        <th>#</th>
+        <th>Ad</th>
+        <th>Soyad</th>
+        <th>Telefon</th>
+        <th>Ev telefonu</th>
+        <th>Unvan</th>
+        <th>Email</th>
+        <th>Vezife</th>
+        <th></th>
+    </thead>
+
+    <tbody>
+        {% for st in staff%}
+        <tr> 
+            <td>{{ forloop.counter }}</td>
+            <td>{{ st.ad }}</td>
+            <td>{{ st.soyad }}</td>
+            <td>{{ st.telefon }}</td>
+            <td>{{ st.ev_tel }}</td>
+            <td>{{ st.unvan }}</td>
+            <td>{{ st.email }}</td>
+            <td>{{ st.vezife }}</td>
+            <td>
+                <a class="btn btn-warning btn-sm" href="http://127.0.0.1:8000/editstaff/{{ st.id }}"><i class="bi bi-pencil"></i></a>
+                <a class="btn btn-danger btn-sm" href="http://127.0.0.1:8000/deleteconstaff/{{st.id}}"><i class="bi bi-trash"></i></a>
+                <a class="btn btn-primary btn-sm" href="http://127.0.0.1:8000/senedler/{{ st.id }}"><i class="bi bi-card-list"></i></a>
+
+            </td>
+           
+
+        </tr>
+    </tbody>
+    {% endfor %}
+
+
+
+
+</table>
+
+
+
+
+
+
+
+
+</div>
+
+{% endblock  %}

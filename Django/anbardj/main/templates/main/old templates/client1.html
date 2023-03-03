@@ -1,0 +1,129 @@
+{% extends 'main/layout.html' %}
+{% block 'title'  %}Client{% endblock %}
+{% block 'content'  %}
+
+
+<br><br><br>
+
+<div class="container">
+
+    <div class="alert alert-secondary"><h3>Müştəri</h3></div>
+
+    {% for message in messages %}
+    <div class="alert alert-info  " role="alert"> {{ message }}</div>
+    {% endfor %}
+    <br><br>
+
+
+    {% if sil_id %}
+        <div class="alert alert-info "><b>
+            Siz bu klienti silmeye eminsinizmi?<br><br>
+            <a href="deleteclient/{{sil_id}}"><button type="submit" class="btn btn-success btn-sm sil">He</button></a>
+            <a href="http://127.0.0.1:8000/clients/"><button type="button" class="btn btn-danger btn-sm sil">Yox</button></a>
+        </div>
+    {% endif %}
+    
+    <div class="alert alert-secondary" role="alert">
+        {% if editdata %}
+        
+            <form method="post" action="http://127.0.0.1:8000/updateclient/" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                Foto:<br>
+                <input type="file" name="foto"><br><br>
+
+                Ad:<br>
+                <input type="text" autocomplete="off" class="form-control" name="ad" value="{{editdata.ad}}"><br><br>
+
+                Soyad:<br>
+                <input type="text" autocomplete="off" class="form-control" name="soyad" value="{{editdata.soyad}}"><br><br>
+
+                Tel:<br>
+                <input type="text" autocomplete="off" class="form-control" name="tel" value="{{editdata.tel}}"><btelr><br>
+
+                Email:<br>
+                <input type="text" autocomplete="off" class="form-control" name="email" value="{{editdata.email}}"><br><br>
+
+                Shirket:<br>
+                <input type="text" autocomplete="off" class="form-control" name="shirket" value="{{editdata.shirket}}"><br><br>
+                <input type="hidden" name="cfoto" value="{{editdata.imageclient}}">
+                <input type="hidden" name="id" value="{{editdata.id}}">
+                <button type="submit" class="btn btn-success btn-sm update" name="update" value="Yenile">Yenile</button></a>
+                <a href="/"><button type="button" class="btn btn-danger btn-sm update">Imtina</button></a>
+            </form>
+        
+        {% else %}
+
+            <form method="post" action="addclient/" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                Foto:<br>
+                <input type="file" autocomplete="off" class="form-control" name="foto"><br><br>
+
+                Ad:<br>
+                <input type="text" autocomplete="off" class="form-control" name="ad"><br><br>
+
+                Soyad:<br>
+                <input type="text" autocomplete="off" class="form-control" name="soyad"><br><br>
+
+                Tel:<br>
+                <input type="text" autocomplete="off" class="form-control" name="tel"><br><br>
+
+                Email:<br>
+                <input type="text" autocomplete="off" class="form-control" name="email"><br><br>
+
+                Shirket:<br>
+                <input type="text" autocomplete="off" class="form-control" name="shirket"><br><br>
+                
+                <button type="submit" name="d" class="btn btn-success btn-sm insert">Daxil et</button>
+                
+            </form>
+        
+        {% endif %}
+    </div>
+
+    <br><br>
+    Bazada {{sayclient}} klient var
+    <br><br>
+
+    <table class="table">
+
+        <thead class="thead-dark">
+            <th>Ad</th>
+            <th>Soyad</th>
+            <th>Telefon</th>
+            <th>Email</th>
+            <th>Şirkət</th>
+            <th></th>
+        </thead>
+
+       
+            
+        <tbody>
+            {% for x in clientdata %}
+               
+                <tr>
+                    <td>{{x.ad}}</td>
+                    <td>{{x.soyad}}</td>
+                    <td>{{x.tel}}</td>
+                    <td>{{x.email}}</td>
+                    <td>{{x.shirket}}</td>
+    
+                    <td>   
+                        <a href="http://127.0.0.1:8000/silclient/{{x.id}}"><button type="button" class="btn btn-danger btn-sm sil" name="sil">Sil</button> </a> 
+                        <a href="http://127.0.0.1:8000/redakteclient/{{x.id}}"><button type="button" class="btn btn-primary btn-sm sil" name="redakte">Redakte</button> </a><br><br>
+                    </td>
+                </tr>
+           
+        </tbody>
+        {% endfor %}
+
+    </table>    
+
+    {% endblock %}
+</div>
+
+
+
+
+
